@@ -23,7 +23,7 @@ const PageNavBar = () => {
 
                         arrowIcon={false}
                         inline={true}
-                        label={<Avatar alt="User settings" img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded={true} />}
+                        label={<Avatar alt="User settings" img="https://i.ibb.co/YWyS5Mj/avatar.png" rounded={true} />}
                     >
                         <Dropdown.Header>
                             <span className="block text-sm">

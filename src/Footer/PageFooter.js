@@ -8,22 +8,23 @@ const PageFooter = () => {
   <div className="w-full text-center">
     <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
       <Footer.Brand
-        href="https://flowbite.com"
+      className='text-sm'
+        href="/"
         src="https://flowbite.com/docs/images/logo.svg"
         alt="Flowbite Logo"
-        name="Flowbite"
+        name="Injection Molding  System"
       />
       <Footer.LinkGroup>
-        <Footer.Link href="#">
+        <Footer.Link href="#" className='mx-1'>
           About
         </Footer.Link>
-        <Footer.Link href="#">
+        <Footer.Link className='mx-1' href="#">
           Privacy Policy
         </Footer.Link>
-        <Footer.Link href="#">
+        <Footer.Link className='mx-1' href="#">
           Licensing
         </Footer.Link>
-        <Footer.Link href="#">
+        <Footer.Link className='mx-1' href="#">
           Contact
         </Footer.Link>
       </Footer.LinkGroup>
@@ -31,7 +32,7 @@ const PageFooter = () => {
     <Footer.Divider />
     <Footer.Copyright
       href="#"
-      by="Flowbite™"
+      by="Developer™"
       year={2022}
     />
   </div>
