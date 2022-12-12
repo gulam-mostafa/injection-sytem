@@ -3,38 +3,45 @@ import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Options from '../Pages/Options';
+import Accordins from './Accordins';
 
 
 const Home = () => {
-      const [cycleTime, setCycleTime] = useState(0)
-      const [preformSize, setPreformSize] = useState(0)
-      const [currentPreforms, setCurrentPreforms] = useState(0)
-      const [activeCavity, setActiveCavity] = useState(0)
-      const [remainsTime, setRemainsTime] = useState(0)
-      const [perCartons, setPerCartons] = useState(0)
-      const [wastage, setWastage] = useState(0)
-      const [underPreforms, setUnderPreforms] = useState(0)
-      const [perContainer, setPerContainer] = useState(0)
-      const [perShift, setPerShift] = useState(0)
+    const [cycleTime, setCycleTime] = useState(0)
+    console.log(cycleTime)
+    const [preformSize, setPreformSize] = useState(0)
+    const [currentPreforms, setCurrentPreforms] = useState(0)
+    const [activeCavity, setActiveCavity] = useState(0)
+    const [remainsTime, setRemainsTime] = useState(0)
+    const [perCartons, setPerCartons] = useState(0)
+    const [wastage, setWastage] = useState(0)
+    const [underPreforms, setUnderPreforms] = useState(0)
+    const [perContainer, setPerContainer] = useState(0)
+    const [perShift, setPerShift] = useState(0)
+    const [hourlyProd, setHourlyProd] = useState(0)
     const add = (event) => {
         event.preventDefault()
         const form = event.target;
         const preformSizes = form.preformssize.value;
-        const cycleTimes = form.cycleTimes.value;
+        const cycleTimes = parseFloat(form.cycleTimes.value);
+        setCycleTime(cycleTimes)
+       
         const currentPreforms = form.currentPreforms.value;
-        const activeCavity = form.activeCavity.value;
+        const activeCavity = parseFloat(form.activeCavity.value);
         const remainsTime = form.remainsTime.value;
         const perCartons = form.perCartons.value;
         const perCase = form.perCase.value;
         const wastage = form.wastage.value;
         const underPreforms = form.underPreforms.value;
         const perContainer = form.perContainer.value;
-        const perShift = form.perShift.value;
+        const perShift = parseFloat(form.perShift.value);
+        // console.log(perCartons, preformSizes, cycleTimes, currentPreforms, activeCavity, remainsTime, perCase, wastage, underPreforms, perContainer, perShift)
 
-        // console.log(preformSizes)
-
-        console.log(perCartons, preformSizes,  cycleTimes, currentPreforms, activeCavity, remainsTime, perCase, wastage,underPreforms,perContainer,perShift)
-
+        const hourlyOutput = (activeCavity * 3600)/cycleTime
+        console.log(activeCavity, cycleTime )
+        setHourlyProd(hourlyOutput.toFixed(2))
+        console.log(hourlyOutput.toFixed(2))
+        
 
 
 
@@ -44,6 +51,12 @@ const Home = () => {
     return (
         <div className='  my-4 lg:mx-4 mx-2 '>
             <Options></Options>
+
+      <div className='bg-red-200'>
+        <Accordins></Accordins>
+      </div>
+        <p>Hourly Production {hourlyProd}</p>
+
             <h2 className='underline underline-offset-4 decoration-wavy  mb-8 decoration-black -600 text-center text-xl font-bold my-4 text-blue-600 '>Preforms calculator page</h2>
             <form onSubmit={add} className="flex flex-col  gap-1">
                 <div className=' grid lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4  gap-1 lg:gap-4  place-items-stretch'>
@@ -107,6 +120,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='activeCavity'
+                            defaultValue={96}
                                 type="text" placeholder="Active Cavity" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10  text-end '> Ps</p>
                         </div>
