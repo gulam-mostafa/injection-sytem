@@ -1,14 +1,14 @@
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
+import { Button, Card, Checkbox, Label, TextInput } from 'flowbite-react';
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Options from '../Pages/Options';
 import Accordins from './Accordins';
-
+import HomeCards from './HomeCards';
 
 const Home = () => {
     const [cycleTime, setCycleTime] = useState(0)
-    console.log(cycleTime)
+    // console.log(cycleTime)
     const [preformSize, setPreformSize] = useState(0)
     const [currentPreforms, setCurrentPreforms] = useState(0)
     const [activeCavity, setActiveCavity] = useState(0)
@@ -19,29 +19,44 @@ const Home = () => {
     const [perContainer, setPerContainer] = useState(0)
     const [perShift, setPerShift] = useState(0)
     const [hourlyProd, setHourlyProd] = useState(0)
+    // console.log(hourlyProd)
+    const [perHourseMaterialCon, setPerHourMaterilaCon] = useState(0)
     const add = (event) => {
         event.preventDefault()
         const form = event.target;
-        const preformSizes = form.preformssize.value;
+        const preformSizes = parseFloat(form.preformssize.value);
         const cycleTimes = parseFloat(form.cycleTimes.value);
-        setCycleTime(cycleTimes)
-       
-        const currentPreforms = form.currentPreforms.value;
+        const currentPreforms = parseFloat(form.currentPreforms.value);
         const activeCavity = parseFloat(form.activeCavity.value);
-        const remainsTime = form.remainsTime.value;
-        const perCartons = form.perCartons.value;
-        const perCase = form.perCase.value;
-        const wastage = form.wastage.value;
-        const underPreforms = form.underPreforms.value;
-        const perContainer = form.perContainer.value;
+        const remainsTimes = parseFloat(form.remainsTime.value);
+        const perCartons = parseFloat(form.perCartons.value);
+        const perCase = parseFloat(form.perCase.value);
+        const wastage = parseFloat(form.wastage.value);
+        const underPreforms = parseFloat(form.underPreforms.value);
+        const perContainer = parseFloat(form.perContainer.value);
         const perShift = parseFloat(form.perShift.value);
         // console.log(perCartons, preformSizes, cycleTimes, currentPreforms, activeCavity, remainsTime, perCase, wastage, underPreforms, perContainer, perShift)
+        const hourlyOutput = (activeCavity * 3600) / cycleTimes;
+        // console.log( currentPreforms )
+        setHourlyProd(hourlyOutput)
 
-        const hourlyOutput = (activeCavity * 3600)/cycleTime
-        console.log(activeCavity, cycleTime )
-        setHourlyProd(hourlyOutput.toFixed(2))
-        console.log(hourlyOutput.toFixed(2))
-        
+        const perHourMaterial = (hourlyOutput * preformSizes) / 1000
+        setPerHourMaterilaCon(perHourMaterial)
+
+
+        if (remainsTimes > 0) {
+
+            const totalRemainsTime = 60 / remainsTimes;
+            const remainProduction = hourlyOutput / totalRemainsTime;
+           const totalShiftProduction = currentPreforms + remainProduction
+           console.log(currentPreforms, remainProduction)
+            console.log(totalShiftProduction)
+        }
+        else {
+            console.log(currentPreforms)
+            return currentPreforms;
+         
+        }
 
 
 
@@ -51,11 +66,14 @@ const Home = () => {
     return (
         <div className='  my-4 lg:mx-4 mx-2 '>
             <Options></Options>
+            <div className=' my-4'>
 
-      <div className='bg-red-200'>
-        <Accordins></Accordins>
-      </div>
-        <p>Hourly Production {hourlyProd}</p>
+                <HomeCards
+                    hourlyProd={[hourlyProd, perHourseMaterialCon]}
+                ></HomeCards>
+            </div>
+            <p>Hourly Production {hourlyProd}</p>
+            <p>Hourly Production {perHourseMaterialCon.toFixed(2)}</p>
 
             <h2 className='underline underline-offset-4 decoration-wavy  mb-8 decoration-black -600 text-center text-xl font-bold my-4 text-blue-600 '>Preforms calculator page</h2>
             <form onSubmit={add} className="flex flex-col  gap-1">
@@ -74,6 +92,7 @@ const Home = () => {
                                 id='preformssize'
                                 name='preformssize'
                                 type="text"
+                                defaultValue={11}
                                 placeholder="Type Size"
                                 className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1      w-10 text-end '> gms</p>
@@ -90,7 +109,15 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='cycleTimes'
-                                type="text" placeholder="Type Cycle Times" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
+                                type="text"
+                                defaultValue={7.5}
+                                required
+                                onKeyPress={(event) => {
+                                    if (!/[0-9.]/.test(event.key)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+                                placeholder="Type Cycle Times" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10 text-end '>Sec</p>
                         </div>
                     </div>
@@ -105,6 +132,12 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='currentPreforms'
+                                onKeyPress={(event) => {
+                                    if (!/[0-9.]/.test(event.key)) {
+                                        event.preventDefault();
+                                    }
+                                }}
+
                                 type="text" placeholder="Type Current Preforms" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10 text-end '> Ps</p>
                         </div>
@@ -120,7 +153,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='activeCavity'
-                            defaultValue={96}
+                                defaultValue={96}
                                 type="text" placeholder="Active Cavity" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10  text-end '> Ps</p>
                         </div>
@@ -137,6 +170,7 @@ const Home = () => {
                             </div>
                             <div className='flex w-1/ justify-end '>
                                 <input name='remainsTime'
+                                    defaultValue={0}
                                     type="text" placeholder="Remain Minute" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                                 <p className='ml-1     w-10 text-end '> Min.</p>
                             </div>
