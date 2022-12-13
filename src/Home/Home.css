@@ -1,0 +1,6 @@
+input::-webkit-input-defaultValue{
+    color: rgb(233, 29, 199);
+}
+input::-webkit-input-placeholder{
+    color: rgb(187, 182, 186);
+}
