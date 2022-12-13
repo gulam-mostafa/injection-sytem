@@ -58,8 +58,13 @@ const Home = () => {
             const totalShiftProduction = currentProduction + totalRemainProduction
             const totalCartons = totalShiftProduction / perCartonValue
             if (totalCartons == Infinity) {
-                setTotalCartons('per carton 1?')
+                setTotalCartons('fill per carton ')
             }
+            else if (currentProduction <= 0 && perCartons){
+                setTotalCartons('fill current prefore')
+               return
+            }
+         
             else {
 
                 setTotalCartons(totalCartons)
@@ -68,8 +73,11 @@ const Home = () => {
         }
         else {
             const perCartonsZero = perCartons ? perCartons : 0;
-            if (perCartonsZero <= 0) {
-                setTotalCartons('per carton 2?')
+            if (perCartonsZero <= 0 ) {
+                setTotalCartons('Fill per cartons')
+            }
+            else if(currentProduction<= 0 ){
+                setTotalCartons('Fill current preforms')
             }
             else {
                 const totalCartons = currentProduction / perCartonsZero
