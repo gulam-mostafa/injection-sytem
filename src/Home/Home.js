@@ -6,50 +6,28 @@ import Options from '../Pages/Options';
 import Accordins from './Accordins';
 import HomeCards from './HomeCards';
 import './Home.css'
-import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 
 const Home = () => {
-    const [cycleTime, setCycleTime] = useState(0)
-    // console.log(cycleTime)
-    const [preformSize, setPreformSize] = useState(0)
     const [totalPreforms, setTotalPreforms] = useState(0)
-    const [activeCavity, setActiveCavity] = useState(0)
-    const [remainsTime, setRemainsTime] = useState(0)
-    const [perCartons, setPerCartons] = useState(0)
     const [wastages, setWastage] = useState(0)
-
-    const [underPreforms, setUnderPreforms] = useState(0)
-    const [perContainer, setPerContainer] = useState(0)
-    const [perShift, setPerShift] = useState(0)
     const [hourlyProd, setHourlyProd] = useState(0)
-
     const [totalCarton, setTotalCartons] = useState(0)
-    // console.log(totalCarton)
-
-    const [loader, setLoader] = useState(true)
     const [perHourseMaterialCon, setPerHourMaterilaCon] = useState(0)
     const [totalMaterial, setTotalMaterials] = useState(0)
     const [percentage, setPercentage] = useState(0)
     const [totalCases, setTotalCase] = useState(0)
     const [totalContainer, setTotalContainer] = useState()
-    const [averageCycleTime, setAverageCycleTime] = useState()
+    const [averageCycleTime, setAverageCycleTime] = useState(0)
     const [runningTime, setRunningTime] = useState(0)
     const [breakDown, setBreakdown] = useState(0)
 
-
     const add = async (event) => {
-
-
         event.preventDefault()
         const form = event.target;
         const preformSizes = parseFloat(form.preformssize.value);
         const cycleTimes = parseFloat(form.cycleTimes.value);
-        // if (cycleTime >= 0) {
-
-        // }
-
         const currentPreforms = parseFloat(form.currentPreforms.value);
         const currentProduction = currentPreforms ? currentPreforms : 0;
         const activeCavity = parseFloat(form.activeCavity.value);
@@ -61,6 +39,7 @@ const Home = () => {
         const inputWastage = parseFloat(form.wastage.value);
 
         const wastageOfInput = inputWastage ? inputWastage : 0
+        setWastage(wastageOfInput)
         const underPreforms = parseFloat(form.underPreforms.value);
         const perContainer = parseFloat(form.perContainer.value);
         const perShift = parseFloat(form.perShift.value);
@@ -68,11 +47,19 @@ const Home = () => {
         const eMin = parseFloat(form.eMin.value);
         // console.log(perCartons, preformSizes, cycleTimes, currentPreforms, activeCavity, remainsTime, perCase, wastage, underPreforms, perContainer, perShift)
         const hourlyOutput = (activeCavity * 3600) / cycleTimes;
-        // console.log( currentPreforms )
-        setHourlyProd(hourlyOutput)
+        if (isNaN(hourlyOutput)) {
+            setHourlyProd('Empty Input')
+        } else {
+            setHourlyProd(hourlyOutput)
+        }
 
         const perHourMaterial = (hourlyOutput * preformSizes) / 1000
-        setPerHourMaterilaCon(perHourMaterial)
+        if (isNaN(perHourMaterial)) {
+
+            setPerHourMaterilaCon('Empty Input')
+        } else {
+            setPerHourMaterilaCon(perHourMaterial)
+        }
 
         let totalCartons = 0
         if (remainsTimes >= 0) {
@@ -91,7 +78,7 @@ const Home = () => {
             else {
 
                 setTotalCartons(totalCartons.toFixed(2))
-                setLoader(false)
+
             }
         }
         else {
@@ -105,7 +92,6 @@ const Home = () => {
             else {
                 totalCartons = currentProduction / perCartonsZero
                 setTotalCartons(totalCartons.toFixed(2))
-                setLoader(false)
             }
         }
 
@@ -129,12 +115,16 @@ const Home = () => {
             setTotalMaterials(totalMaterials.toFixed(2))
 
             const wastagePercentage = (wastageOfInput * 100) / totalMaterials
-            setPercentage(wastagePercentage.toFixed(2))
+            if (!isNaN(wastagePercentage)) {
+                setPercentage(wastagePercentage.toFixed(2))
+            }
         } else {
             const totalMaterials = totalShiftPreforms * (preformSizes / 1000) + TotalUnderPreform + wastageOfInput
             setTotalMaterials(totalMaterials)
             const wastagePercentage = (wastageOfInput * 100) / totalMaterials
-            setPercentage(wastagePercentage.toFixed(2))
+            if (!isNaN(wastagePercentage)) {
+                setPercentage(wastagePercentage.toFixed(2))
+            }
 
 
         }
@@ -154,56 +144,68 @@ const Home = () => {
         }
 
         const runningTime = totalShiftPreforms / hourlyOutput
-       
-        const breakDown = perShift.toFixed(2)- runningTime.toFixed(2)
+
+        const breakDown = perShift.toFixed(2) - runningTime.toFixed(2)
         // console.log(perShift.toFixed(1)- runningTime.toFixed(1))
         // console.log( runningTime)
         // console.log( breakDown)
         const minTohOur = eMin / 60
         const estimatedRunningTime = perShift - (eHour + minTohOur)
 
-        if(eHour > 0 || eMin > 0){
-            const averageCycleTime = activeCavity * 3600
-        const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
-        const avarageCycle = totalAverageCycleTime * estimatedRunningTime
-        setRunningTime(estimatedRunningTime.toFixed(2))
-        setBreakdown((eHour + minTohOur).toFixed(2))
-        if(avarageCycle - cycleTimes > 1||avarageCycle - cycleTimes < -1){
-            toast.error("Maybe Your Input Wrong (cycle-time) ! আপনার হিসাবে ভুল থাকতে পারে", {
-                position: toast.POSITION.TOP_CENTER
-            })
-            console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
-        }
-
-
-        
-        setAverageCycleTime(avarageCycle.toFixed(3))
-        }else{
+        if (eHour > 0 || eMin > 0) {
             const averageCycleTime = activeCavity * 3600
             const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
-            const avarageCycle = totalAverageCycleTime * runningTime 
-            setBreakdown(breakDown.toFixed(2))
-            console.log(breakDown)
-            setRunningTime(runningTime.toFixed(2))
-            // setRunningTime(runningTime)
-            setAverageCycleTime(avarageCycle.toFixed(3))
+            const avarageCycle = totalAverageCycleTime * estimatedRunningTime
+            if (!isNaN(estimatedRunningTime)) {
+                setRunningTime(estimatedRunningTime.toFixed(2))
+            }
+            if (!isNaN(eHour + minTohOur)) {
+                setBreakdown((eHour + minTohOur).toFixed(2))
+            }
+            if (avarageCycle - cycleTimes > 1 || avarageCycle - cycleTimes < -1) {
+                toast.error("Maybe Your Input Wrong (cycle-time) ! আপনার হিসাবে ভুল থাকতে পারে", {
+                    position: toast.POSITION.TOP_CENTER
+                })
+                console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
+            }
 
-            if(avarageCycle - cycleTimes > .8||avarageCycle - cycleTimes < -.8){
+
+
+            if (!isNaN(avarageCycle)) {
+                setAverageCycleTime(avarageCycle.toFixed(3))
+            }
+        } else {
+            const averageCycleTime = activeCavity * 3600
+            const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
+            const avarageCycle = totalAverageCycleTime * runningTime
+            if (!isNaN(breakDown)) {
+                setBreakdown(breakDown.toFixed(2))
+            }
+
+            if (!isNaN(runningTime)) {
+                setRunningTime(runningTime.toFixed(2))
+            }
+            // setRunningTime(runningTime)
+            if (!isNaN(avarageCycle)) {
+                setAverageCycleTime(avarageCycle.toFixed(3))
+            }
+
+            if (avarageCycle - cycleTimes > .8 || avarageCycle - cycleTimes < -.8) {
                 toast.error("Maybe Your Input Wrong ! আপনার হিসাবে ভুল থাকতে পারে", {
                     position: toast.POSITION.TOP_CENTER
                 })
-                console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
+                console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
             }
         }
 
-        if(perShift < runningTime ||perShift < estimatedRunningTime){
+        if (perShift + .03 < runningTime || perShift + .03 < estimatedRunningTime) {
             toast.error("Maybe Your Input Wrong(production) ! আপনার হিসাবে ভুল থাকতে পারে", {
                 position: toast.POSITION.TOP_CENTER
             })
-            console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
+            console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
         }
-      
 
+        window.scrollTo(0, 180);
     }
 
 
@@ -217,11 +219,11 @@ const Home = () => {
             </div>
             <Accordins
 
-             totalProduction={{hourlyProd, perHourseMaterialCon}}
+                totalProduction={{ hourlyProd, perHourseMaterialCon, totalCarton, totalPreforms, wastages, totalMaterial, percentage, totalCases, totalContainer, averageCycleTime, runningTime, breakDown }}
             >
 
             </Accordins>
-            <p>Hourly Production {hourlyProd}</p>
+            {/* <p>Hourly Production {hourlyProd}</p>
             <p>Hourly Production {perHourseMaterialCon.toFixed(2)}</p>
             <p>total cartons {totalCarton}</p>
             <p>total preforms  {totalPreforms}</p>
@@ -232,7 +234,7 @@ const Home = () => {
             <p>setTotalContainer: {totalContainer}</p>
             <p>setAverageCycleTime: {averageCycleTime}</p>
             <p>setrunningTime: {runningTime}</p>
-            <p>setbreakDown: {breakDown}</p>
+            <p>setbreakDown: {breakDown}</p> */}
 
             <h2 className='underline underline-offset-4 decoration-wavy  mb-8 decoration-black -600 text-center text-xl font-bold my-4 text-blue-600 '>Preforms calculator page</h2>
             <form onSubmit={add} className="flex flex-col  gap-1">
@@ -251,7 +253,7 @@ const Home = () => {
                                 id='preformssize'
                                 name='preformssize'
                                 type="text"
-                                defaultValue={11}
+                                defaultValue={0}
                                 placeholder="Type Size"
                                 className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1      w-10 text-end '> gms</p>
@@ -269,7 +271,7 @@ const Home = () => {
                         <div className='flex w-1/ justify-end '>
                             <input name='cycleTimes'
                                 type="text"
-                                defaultValue={7.5}
+                                defaultValue={0}
                                 required
                                 onKeyPress={(event) => {
                                     if (!/[0-9.]/.test(event.key)) {
@@ -291,7 +293,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='currentPreforms'
-                                defaultValue={258000}
+                                defaultValue={0}
                                 onKeyPress={(event) => {
                                     if (!/[0-9.]/.test(event.key)) {
                                         event.preventDefault();
@@ -313,7 +315,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='activeCavity'
-                                defaultValue={96}
+                                defaultValue={0}
                                 type="text" placeholder="Active Cavity" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10  text-end '> Ps</p>
                         </div>
@@ -349,7 +351,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='perCartons'
-                                defaultValue={1400}
+                                defaultValue={0}
                                 type="text" placeholder="Type per cartons" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10 text-end '> ps</p>
                         </div>
@@ -400,7 +402,7 @@ const Home = () => {
                         <div className='flex w-1/ justify-end '>
                             <input name='underPreforms'
                                 id='pla'
-                                defaultValue={2}
+                                defaultValue={0}
                                 type="text" placeholder="Type cartons" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs myClass" />
                             <p className='ml-1     w-10 text-end '> crt.</p>
                         </div>
