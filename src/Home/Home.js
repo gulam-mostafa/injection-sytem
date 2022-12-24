@@ -90,7 +90,7 @@ const Home = () => {
             }
             else {
 
-                setTotalCartons(totalCartons)
+                setTotalCartons(totalCartons.toFixed(2))
                 setLoader(false)
             }
         }
@@ -104,7 +104,7 @@ const Home = () => {
             }
             else {
                 totalCartons = currentProduction / perCartonsZero
-                setTotalCartons(totalCartons)
+                setTotalCartons(totalCartons.toFixed(2))
                 setLoader(false)
             }
         }
@@ -117,7 +117,7 @@ const Home = () => {
             return
         }
         else {
-            setTotalPreforms(totalShiftPreforms)
+            setTotalPreforms(totalShiftPreforms.toFixed(2))
             // console.log(totalShiftPreforms)
         }
         const TotalUnderPreform = (underPreforms * perCartons * preformSizes) / 1000
@@ -126,15 +126,15 @@ const Home = () => {
         if (isNaN(TotalUnderPreform)) {
             const totalMaterials = totalShiftPreforms * (preformSizes / 1000) + wastageOfInput
             console.log(totalMaterials)
-            setTotalMaterials(totalMaterials)
+            setTotalMaterials(totalMaterials.toFixed(2))
 
             const wastagePercentage = (wastageOfInput * 100) / totalMaterials
-            setPercentage(wastagePercentage)
+            setPercentage(wastagePercentage.toFixed(2))
         } else {
             const totalMaterials = totalShiftPreforms * (preformSizes / 1000) + TotalUnderPreform + wastageOfInput
             setTotalMaterials(totalMaterials)
             const wastagePercentage = (wastageOfInput * 100) / totalMaterials
-            setPercentage(wastagePercentage)
+            setPercentage(wastagePercentage.toFixed(2))
 
 
         }
@@ -166,32 +166,43 @@ const Home = () => {
             const averageCycleTime = activeCavity * 3600
         const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
         const avarageCycle = totalAverageCycleTime * estimatedRunningTime
-        setRunningTime(estimatedRunningTime)
-        setBreakdown((eHour + minTohOur))
+        setRunningTime(estimatedRunningTime.toFixed(2))
+        setBreakdown((eHour + minTohOur).toFixed(2))
+        if(avarageCycle - cycleTimes > 1||avarageCycle - cycleTimes < -1){
+            toast.error("Maybe Your Input Wrong (cycle-time) ! আপনার হিসাবে ভুল থাকতে পারে", {
+                position: toast.POSITION.TOP_CENTER
+            })
+            console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
+        }
+
+
         
         setAverageCycleTime(avarageCycle.toFixed(3))
         }else{
             const averageCycleTime = activeCavity * 3600
             const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
             const avarageCycle = totalAverageCycleTime * runningTime 
-            setBreakdown(breakDown)
+            setBreakdown(breakDown.toFixed(2))
             console.log(breakDown)
-            setRunningTime(runningTime)
-            setRunningTime(runningTime)
+            setRunningTime(runningTime.toFixed(2))
+            // setRunningTime(runningTime)
             setAverageCycleTime(avarageCycle.toFixed(3))
+
+            if(avarageCycle - cycleTimes > .8||avarageCycle - cycleTimes < -.8){
+                toast.error("Maybe Your Input Wrong ! আপনার হিসাবে ভুল থাকতে পারে", {
+                    position: toast.POSITION.TOP_CENTER
+                })
+                console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
+            }
         }
 
-
-
-        // if (totalAverageCycleTime - cycleTimes > 1 || totalAverageCycleTime - cycleTimes < -1) {
-
-        //     toast.error("Maybe Your Input Wrong !", {
-        //         position: toast.POSITION.TOP_CENTER
-        //     });
-        // }
-
-
-
+        if(perShift < runningTime ||perShift < estimatedRunningTime){
+            toast.error("Maybe Your Input Wrong(production) ! আপনার হিসাবে ভুল থাকতে পারে", {
+                position: toast.POSITION.TOP_CENTER
+            })
+            console.log(perShift ,'and' , runningTime ,'and',estimatedRunningTime) 
+        }
+      
 
     }
 
@@ -204,6 +215,12 @@ const Home = () => {
                     hourlyProd={[hourlyProd, perHourseMaterialCon]}
                 ></HomeCards>
             </div>
+            <Accordins
+
+             totalProduction={{hourlyProd, perHourseMaterialCon}}
+            >
+
+            </Accordins>
             <p>Hourly Production {hourlyProd}</p>
             <p>Hourly Production {perHourseMaterialCon.toFixed(2)}</p>
             <p>total cartons {totalCarton}</p>

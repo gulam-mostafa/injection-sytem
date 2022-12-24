@@ -1,17 +1,18 @@
 import { Accordion } from 'flowbite-react';
 import React from 'react';
 
-const Accordins = () => {
+const Accordins = ({totalProduction}) => {
+  console.log(totalProduction.hourlyProd)
     return (
-        <div className='my-8'>
+        <div className='my-8  '>
             <Accordion flush={true}>
-  <Accordion.Panel>
-    <Accordion.Title>
+  <Accordion.Panel className='bg-red-500' >
+    <Accordion.Title >
       Original Results
     </Accordion.Title>
     <Accordion.Content>
       <p className="mb-2 text-gray-500 dark:text-gray-400">
-        Flowbite is an open-source library of interactive components built on top of Tailwind CSS including buttons, dropdowns, modals, navbars, and more.
+        {totalProduction.hourlyProd}
       </p>
       <p className="text-gray-500 dark:text-gray-400">
         Check out this guide to learn how to{' '}
@@ -25,7 +26,8 @@ const Accordins = () => {
       </p>
     </Accordion.Content>
   </Accordion.Panel>
-  <Accordion.Panel>
+
+  <Accordion.Panel className='bg-red-400'>
     <Accordion.Title>
       Is there a Figma file available?
     </Accordion.Title>
