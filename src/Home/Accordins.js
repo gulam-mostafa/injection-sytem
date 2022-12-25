@@ -2,14 +2,17 @@ import { Accordion } from 'flowbite-react';
 import React from 'react';
 
 const Accordins = ({ totalProduction }) => {
-  const { hourlyProd, perHourseMaterialCon, totalCarton, totalPreforms, wastages, totalMaterial, percentage, totalCases, totalContainer, averageCycleTime, runningTime, breakDown } = totalProduction
-  console.log(totalProduction)
+  const { hourlyProd, perHourseMaterialCon, totalCarton, totalPreforms, wastages, totalMaterial, percentage, totalCases, totalContainer, averageCycleTime, runningTime, breakDown,
+    totalCArtonsUp, totaPreformUp, hourlyOutputUp,
+    BreakDownUp, runningTimeUp, avarageCycleTimeUp, totalMaterialUp, wastagePercentageUp, totalCaseUp, totalContainerUp
+  } = totalProduction
+  // console.log(totalProduction)
   return (
     <div className='my-8 bg-gray-300 rounded-lg '>
       <Accordion flush={true}>
         <Accordion.Panel className=' ' >
           <Accordion.Title >
-            <p className='text-amber-600 '> Original Results</p>
+            <p className='text-amber-600 '> Original Results {totalCarton} cartons</p>
           </Accordion.Title>
           <Accordion.Content>
             <div >
@@ -113,14 +116,14 @@ const Accordins = ({ totalProduction }) => {
 
         <Accordion.Panel className='bg-red-400'>
           <Accordion.Title>
-          if 38 Cartons
+            if <span className='font-bold text-pink-700 '>{totalCArtonsUp}</span> Cartons, click Here
           </Accordion.Title>
           <Accordion.Content>
-          <div >
+            <div >
               <div className='flex border px-2 py-1 rounded-md border-blue-400 justify-between '>
                 <p>Hourly Output:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{hourlyProd}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{hourlyOutputUp}</p>
                   <p>ps</p>
                 </div>
               </div>
@@ -134,14 +137,14 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Total Carton:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{totalCarton}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{ totalCArtonsUp}</p>
                   <p>Cartons</p>
                 </div>
               </div>
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Total Preforms:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{totalPreforms}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{totaPreformUp}</p>
                   <p>Ps</p>
                 </div>
               </div>
@@ -157,14 +160,14 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Total Material consume:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{totalMaterial}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{totalMaterialUp}</p>
                   <p>Kg</p>
                 </div>
               </div>
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Wastage Percentage:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{percentage}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{wastagePercentageUp}</p>
                   <p>%</p>
                 </div>
 
@@ -172,7 +175,7 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Total Case:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{totalCases}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{totalCaseUp}</p>
                   <p>cases</p>
                 </div>
 
@@ -180,7 +183,7 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Total Container:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{totalContainer}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{totalContainerUp}</p>
                   <p>Box</p>
                 </div>
 
@@ -188,7 +191,7 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Average CycleTime:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{averageCycleTime}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{avarageCycleTimeUp}</p>
                   <p>Sec</p>
                 </div>
 
@@ -204,7 +207,7 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Break down Time:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{breakDown}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{BreakDownUp}</p>
                   <p>Hours</p>
                 </div>
 
@@ -215,10 +218,10 @@ const Accordins = ({ totalProduction }) => {
         </Accordion.Panel>
         <Accordion.Panel>
           <Accordion.Title>
-           if 30 Cartons
+            if 30 Cartons
           </Accordion.Title>
           <Accordion.Content>
-          <div >
+            <div >
               <div className='flex border px-2 py-1 rounded-md border-blue-400 justify-between '>
                 <p>Hourly Output:</p>
                 <div className='flex justify-between '>
@@ -298,7 +301,7 @@ const Accordins = ({ totalProduction }) => {
               <div className='flex  justify-between border px-2 py-1 rounded-md border-blue-400'>
                 <p>Running Time:</p>
                 <div className='flex justify-between '>
-                  <p className=' mx-1 font-bold text-red-500 '>{runningTime}</p>
+                  <p className=' mx-1 font-bold text-red-500 '>{runningTimeUp}</p>
                   <p>Hours</p>
                 </div>
 

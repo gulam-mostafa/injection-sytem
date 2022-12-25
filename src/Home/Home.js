@@ -8,8 +8,8 @@ import HomeCards from './HomeCards';
 import './Home.css'
 import { toast } from 'react-toastify';
 
-
 const Home = () => {
+    // useState
     const [totalPreforms, setTotalPreforms] = useState(0)
     const [wastages, setWastage] = useState(0)
     const [hourlyProd, setHourlyProd] = useState(0)
@@ -22,7 +22,21 @@ const Home = () => {
     const [averageCycleTime, setAverageCycleTime] = useState(0)
     const [runningTime, setRunningTime] = useState(0)
     const [breakDown, setBreakdown] = useState(0)
+    //   Uper value 
+    const [totalCArtonsUp, setTotalCartonsUp] = useState(0)
+    const [totaPreformUp, setTotalPreformUp] = useState(0)
+    const [hourlyOutputUp, setHourlyOutputUp] = useState(0)
+    const [runningTimeUp, setRunningTimeUp] = useState(0)
+    const [BreakDownUp, setBreakDownUp] = useState(0)
+    const [avarageCycleTimeUp, setAverageCycleTimeUp] = useState(0)
+    const [totalMaterialUp, setTotalMaterialUp] = useState(0)
+    const [wastagePercentageUp, setWastagePercentageUp] = useState(0)
+    const [totalCaseUp, setTotalCaseUp] = useState(0)
+    const [totalContainerUp, setTotalContainerUp] = useState(0)
+    // console.log(totalCArtonsUp,totaPreformUp,hourlyOutputUp,
+    //     BreakDownUp, runningTimeUp , avarageCycleTimeUp , totalMaterialUp,wastagePercentageUp ,totalCaseUp, totalContainerUp)
 
+    //   function start 
     const add = async (event) => {
         event.preventDefault()
         const form = event.target;
@@ -37,7 +51,6 @@ const Home = () => {
         const perCartonValue = perCartons ? perCartons : 0;
         const perCase = parseFloat(form.perCase.value);
         const inputWastage = parseFloat(form.wastage.value);
-
         const wastageOfInput = inputWastage ? inputWastage : 0
         setWastage(wastageOfInput)
         const underPreforms = parseFloat(form.underPreforms.value);
@@ -52,22 +65,19 @@ const Home = () => {
         } else {
             setHourlyProd(hourlyOutput)
         }
-
         const perHourMaterial = (hourlyOutput * preformSizes) / 1000
         if (isNaN(perHourMaterial)) {
 
             setPerHourMaterilaCon('Empty Input')
         } else {
-            setPerHourMaterilaCon(perHourMaterial)
+            setPerHourMaterilaCon(perHourMaterial.toFixed(2))
         }
-
         let totalCartons = 0
         if (remainsTimes >= 0) {
             const remainsProduction = 60 / deuTime;
             const totalRemainProduction = hourlyOutput / remainsProduction;
             const totalShiftProduction = currentProduction + totalRemainProduction
             totalCartons = totalShiftProduction / perCartonValue
-
             if (totalCartons === Infinity) {
                 setTotalCartons('fill per carton1 ')
             }
@@ -78,7 +88,6 @@ const Home = () => {
             else {
 
                 setTotalCartons(totalCartons.toFixed(2))
-
             }
         }
         else {
@@ -94,7 +103,6 @@ const Home = () => {
                 setTotalCartons(totalCartons.toFixed(2))
             }
         }
-
         const totalShiftPreforms = totalCartons * perCartons
         // console.log(totalCarton)
         // console.log(perCartons)
@@ -107,8 +115,6 @@ const Home = () => {
             // console.log(totalShiftPreforms)
         }
         const TotalUnderPreform = (underPreforms * perCartons * preformSizes) / 1000
-
-
         if (isNaN(TotalUnderPreform)) {
             const totalMaterials = totalShiftPreforms * (preformSizes / 1000) + wastageOfInput
             console.log(totalMaterials)
@@ -120,13 +126,11 @@ const Home = () => {
             }
         } else {
             const totalMaterials = totalShiftPreforms * (preformSizes / 1000) + TotalUnderPreform + wastageOfInput
-            setTotalMaterials(totalMaterials)
+            setTotalMaterials(totalMaterials.toFixed(2))
             const wastagePercentage = (wastageOfInput * 100) / totalMaterials
             if (!isNaN(wastagePercentage)) {
                 setPercentage(wastagePercentage.toFixed(2))
             }
-
-
         }
         const cases = totalShiftPreforms / perCase
         if (!isNaN(cases)) {
@@ -135,23 +139,17 @@ const Home = () => {
         } else {
             setTotalCase('input Empty')
         }
-
         const container = totalCartons / perContainer
         if (!isNaN(container)) {
             setTotalContainer(container.toFixed(2))
         } else {
             setTotalContainer('input Empty')
         }
-
         const runningTime = totalShiftPreforms / hourlyOutput
-
         const breakDown = perShift.toFixed(2) - runningTime.toFixed(2)
-        // console.log(perShift.toFixed(1)- runningTime.toFixed(1))
-        // console.log( runningTime)
-        // console.log( breakDown)
         const minTohOur = eMin / 60
         const estimatedRunningTime = perShift - (eHour + minTohOur)
-
+        const inputBreakDown = minTohOur + eHour
         if (eHour > 0 || eMin > 0) {
             const averageCycleTime = activeCavity * 3600
             const totalAverageCycleTime = averageCycleTime / totalShiftPreforms
@@ -166,13 +164,10 @@ const Home = () => {
                 toast.error("Maybe Your Input Wrong (cycle-time) ! আপনার হিসাবে ভুল থাকতে পারে", {
                     position: toast.POSITION.TOP_CENTER
                 })
-                console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
+                // console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
             }
-
-
-
             if (!isNaN(avarageCycle)) {
-                setAverageCycleTime(avarageCycle.toFixed(3))
+                setAverageCycleTime(avarageCycle.toFixed(2))
             }
         } else {
             const averageCycleTime = activeCavity * 3600
@@ -181,34 +176,81 @@ const Home = () => {
             if (!isNaN(breakDown)) {
                 setBreakdown(breakDown.toFixed(2))
             }
-
             if (!isNaN(runningTime)) {
                 setRunningTime(runningTime.toFixed(2))
             }
             // setRunningTime(runningTime)
             if (!isNaN(avarageCycle)) {
-                setAverageCycleTime(avarageCycle.toFixed(3))
+                setAverageCycleTime(avarageCycle.toFixed(2))
             }
-
             if (avarageCycle - cycleTimes > .8 || avarageCycle - cycleTimes < -.8) {
                 toast.error("Maybe Your Input Wrong ! আপনার হিসাবে ভুল থাকতে পারে", {
                     position: toast.POSITION.TOP_CENTER
                 })
-                console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
+                // console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
             }
         }
-
         if (perShift + .03 < runningTime || perShift + .03 < estimatedRunningTime) {
             toast.error("Maybe Your Input Wrong(production) ! আপনার হিসাবে ভুল থাকতে পারে", {
                 position: toast.POSITION.TOP_CENTER
             })
             console.log(perShift, 'and', runningTime, 'and', estimatedRunningTime)
         }
-
         window.scrollTo(0, 180);
+        // Number celling 
+        const cartonsUp = Math.ceil(totalCartons)
+        if (!isNaN(cartonsUp)) {
+            setTotalCartonsUp(cartonsUp)
+        }
+        const TotalPreformsUp = Math.ceil(cartonsUp * perCartons)
+        if (!isNaN(TotalPreformsUp)) {
+            setTotalPreformUp(TotalPreformsUp)
+        }
+        const hourlyOutputUp = Math.ceil((activeCavity * 3600) / cycleTimes)
+        if (!isNaN(hourlyOutputUp)) {
+            setHourlyOutputUp(hourlyOutputUp)
+        }
+        const runningTmeUP = TotalPreformsUp / hourlyOutputUp
+        if (!isNaN(runningTmeUP)) {
+            setRunningTimeUp(runningTmeUP.toFixed(2))
+        }
+        if (eHour > 0 || eMin > 0) {
+            const avarageCycleTimeUp = ((activeCavity * 3600) / TotalPreformsUp) * estimatedRunningTime
+            setAverageCycleTimeUp(avarageCycleTimeUp.toFixed(2))
+
+            const breakDownUp = perShift.toFixed(2) - (inputBreakDown.toFixed(2))
+            if (!isNaN(breakDownUp)) {
+                setBreakDownUp(breakDownUp.toFixed(2))
+            }
+        } else {
+            const avarageCycleTimeUp = ((activeCavity * 3600) / TotalPreformsUp) * runningTmeUP
+            setAverageCycleTimeUp(avarageCycleTimeUp.toFixed(2))
+            const breakDownUp = perShift.toFixed(2) - runningTmeUP.toFixed(2)
+            if (!isNaN(breakDownUp)) {
+                setBreakDownUp(breakDownUp.toFixed(2))
+            }
+        }
+        const TotalMaterialConsumeUp = ((TotalPreformsUp * preformSizes) / 1000 + (underPreforms * perCartons * preformSizes) / 1000 + inputWastage)
+        if (!isNaN(TotalMaterialConsumeUp)) {
+            setTotalMaterialUp(TotalMaterialConsumeUp.toFixed(2))
+        }
+        const wastagePercentageUp = (inputWastage * 100) / TotalMaterialConsumeUp
+        if (!isNaN(wastagePercentageUp)) {
+            setWastagePercentageUp(wastagePercentageUp.toFixed(2))
+        }
+        const totalCaseUp = TotalPreformsUp / perCase
+        if (!isNaN(totalCaseUp)) {
+            setTotalCaseUp(totalCaseUp)
+        }
+        const totalContainerUp = totalCArtonsUp / perContainer
+        if (!isNaN(totalContainerUp) || isFinite(totalContainerUp)) {
+            setTotalContainerUp(totalContainerUp.toFixed(2))
+            console.log(totalContainerUp)
+        }
+
+
+
     }
-
-
     return (
         <div className='  my-4 lg:mx-4 mx-2 '>
             <Options></Options>
@@ -219,22 +261,15 @@ const Home = () => {
             </div>
             <Accordins
 
-                totalProduction={{ hourlyProd, perHourseMaterialCon, totalCarton, totalPreforms, wastages, totalMaterial, percentage, totalCases, totalContainer, averageCycleTime, runningTime, breakDown }}
+                totalProduction={{
+                    hourlyProd, perHourseMaterialCon, totalCarton, totalPreforms, wastages, totalMaterial, percentage, totalCases, totalContainer, averageCycleTime, runningTime, breakDown,
+                    totalCArtonsUp, totaPreformUp, hourlyOutputUp,
+                    BreakDownUp, runningTimeUp, avarageCycleTimeUp, totalMaterialUp, wastagePercentageUp, totalCaseUp, totalContainerUp
+
+                }}
             >
 
             </Accordins>
-            {/* <p>Hourly Production {hourlyProd}</p>
-            <p>Hourly Production {perHourseMaterialCon.toFixed(2)}</p>
-            <p>total cartons {totalCarton}</p>
-            <p>total preforms  {totalPreforms}</p>
-            <p>wastage {wastages}</p>
-            <p>Total materials: {totalMaterial}</p>
-            <p>percentage: {percentage}</p>
-            <p>setTotalCase: {totalCases}</p>
-            <p>setTotalContainer: {totalContainer}</p>
-            <p>setAverageCycleTime: {averageCycleTime}</p>
-            <p>setrunningTime: {runningTime}</p>
-            <p>setbreakDown: {breakDown}</p> */}
 
             <h2 className='underline underline-offset-4 decoration-wavy  mb-8 decoration-black -600 text-center text-xl font-bold my-4 text-blue-600 '>Preforms calculator page</h2>
             <form onSubmit={add} className="flex flex-col  gap-1">
@@ -253,7 +288,7 @@ const Home = () => {
                                 id='preformssize'
                                 name='preformssize'
                                 type="text"
-                                defaultValue={0}
+                                defaultValue={11.97}
                                 placeholder="Type Size"
                                 className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1      w-10 text-end '> gms</p>
@@ -271,7 +306,7 @@ const Home = () => {
                         <div className='flex w-1/ justify-end '>
                             <input name='cycleTimes'
                                 type="text"
-                                defaultValue={0}
+                                defaultValue={7.5}
                                 required
                                 onKeyPress={(event) => {
                                     if (!/[0-9.]/.test(event.key)) {
@@ -293,7 +328,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='currentPreforms'
-                                defaultValue={0}
+                                defaultValue={350000}
                                 onKeyPress={(event) => {
                                     if (!/[0-9.]/.test(event.key)) {
                                         event.preventDefault();
@@ -315,7 +350,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='activeCavity'
-                                defaultValue={0}
+                                defaultValue={96}
                                 type="text" placeholder="Active Cavity" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10  text-end '> Ps</p>
                         </div>
@@ -351,7 +386,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='perCartons'
-                                defaultValue={0}
+                                defaultValue={1440}
                                 type="text" placeholder="Type per cartons" className="input text-orange-500  text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10 text-end '> ps</p>
                         </div>
@@ -382,7 +417,7 @@ const Home = () => {
                         </div>
                         <div className='flex w-1/ justify-end '>
                             <input name='wastage'
-                                defaultValue={0}
+                                defaultValue={25}
                                 type="text" placeholder="Type Wastage in kg" className="input text-orange-500 text-lg font-bold input-bordered rounded-lg bg-red- input-sm w-full -w-xs" />
                             <p className='ml-1     w-10 text-end '> Kgs</p>
                         </div>
